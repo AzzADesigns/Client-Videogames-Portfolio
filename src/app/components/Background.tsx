@@ -13,14 +13,6 @@ function AnimatedText() {
 
   // Función que se ejecuta en cada frame para las animaciones
   useFrame((state) => {
-    if (textRef.current) {
-      // ROTACIÓN DEL TEXTO - Modifica estos valores para cambiar la rotación
-      // Math.sin(state.clock.elapsedTime * 0.3) * 0.1
-      // 0.3 = velocidad de rotación (más alto = más rápido)
-      // 0.1 = intensidad de rotación (más alto = más movimiento)
-      
-      textRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.2) * 0.05;
-    }
     
     if (groupRef.current) {
       // MOVIMIENTO HORIZONTAL - De derecha a izquierda
@@ -35,8 +27,8 @@ function AnimatedText() {
       // 0.1 = intensidad del flotamiento (más alto = más movimiento)
       const floatY = Math.sin(time * 0.5) * 0.1;
 
-      // Aplica la posición al grupo
-      groupRef.current.position.set(moveX, floatY, 0);
+      // Aplica la posición al grupo (Y = -2 para bajar el texto)
+      groupRef.current.position.set(moveX, floatY - 2, 0);
     }
   });
 
@@ -44,7 +36,7 @@ function AnimatedText() {
     // GRUPO PRINCIPAL - Posición inicial del texto
     // position={[8, 0, 0]} - [X, Y, Z]
     // X = 8 (extremo derecho para comenzar desde la izquierda)
-    // Y = 0 (más alto = más arriba)
+    // Y = -2 (más bajo = más abajo en la pantalla)
     // Z = 0 (más alto = más cerca de la cámara)
     <group ref={groupRef}>
       {/* TEXTO 3D - Configuración del texto */}
