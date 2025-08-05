@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FaEnvelope, FaHome, FaProjectDiagram, FaUserAlt, FaPowerOff } from "react-icons/fa";
+import { FaEnvelope, FaHome, FaUserAlt, FaPowerOff } from "react-icons/fa";
 import { PiGameControllerBold } from "react-icons/pi";
 
 export default function Sidebar() {
