@@ -19,8 +19,88 @@
   }
 }
 
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(-100vw);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+.animate-slide-in {
+  animation: slide-in 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+
+
+
+
+
+
+
+
+.text-3d {
+  perspective: 1000px;
+  text-align: center;
+}
+
+.text-3d-text {
+  font-size: 8rem;
+  font-weight: bold;
+  color: #00A8E8;
+  text-shadow: 
+    0 0 10px rgba(0, 168, 232, 0.8),
+    0 0 20px rgba(0, 168, 232, 0.6),
+    0 0 30px rgba(0, 168, 232, 0.4);
+  
+  /* Efecto 3D con sombras múltiples */
+  position: relative;
+  display: inline-block;
+  transform-style: preserve-3d;
+  margin: 0.5em 0;
+}
+
+.text-3d-text::before {
+  content: attr(data-text);
+  position: absolute;
+  color: rgba(0, 56, 102, 0.5);
+  transform: translateZ(-10px);
+  left: 0;
+  top: 0;
+  z-index: -1;
+}
+
+/* Para navegadores WebKit (Chrome, Safari) */
+.text-3d-text {
+  -webkit-text-stroke: 1px #003866;
+}
+
+/* Efecto de iluminación */
+.text-3d-text:hover {
+  animation: glow 1s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 
+      0 0 10px rgba(0, 168, 232, 0.8),
+      0 0 20px rgba(0, 168, 232, 0.6),
+      0 0 30px rgba(0, 168, 232, 0.4);
+  }
+  to {
+    text-shadow: 
+      0 0 15px rgba(0, 168, 232, 1),
+      0 0 25px rgba(0, 168, 232, 0.8),
+      0 0 35px rgba(0, 168, 232, 0.6),
+      0 0 45px rgba(0, 168, 232, 0.4);
+  }
 }
