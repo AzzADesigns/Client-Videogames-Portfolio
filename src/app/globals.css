@@ -48,59 +48,95 @@ body {
 
 
 
-.text-3d {
+
+
+
+
+
+
+
+
+
+
+
+
+.holographic-text-container {
   perspective: 1000px;
-  text-align: center;
-}
-
-.text-3d-text {
-  font-size: 8rem;
-  font-weight: bold;
-  color: #00A8E8;
-  text-shadow: 
-    0 0 10px rgba(0, 168, 232, 0.8),
-    0 0 20px rgba(0, 168, 232, 0.6),
-    0 0 30px rgba(0, 168, 232, 0.4);
-  
-  /* Efecto 3D con sombras múltiples */
-  position: relative;
-  display: inline-block;
   transform-style: preserve-3d;
-  margin: 0.5em 0;
 }
 
-.text-3d-text::before {
+.holographic-text {
+  position: relative;
+  font-size: 5rem;
+  font-weight: 800;
+  color: rgba(100, 255, 255, 0.8);
+  text-transform: uppercase;
+  text-shadow: 
+    0 0 5px rgba(100, 255, 255, 0.5),
+    0 0 10px rgba(100, 255, 255, 0.4),
+    0 0 15px rgba(100, 255, 255, 0.3);
+  transform: rotateX(15deg) rotateY(-10deg);
+  animation: float 6s ease-in-out infinite;
+  transform-style: preserve-3d;
+}
+
+.holographic-text::before,
+.holographic-text::after {
   content: attr(data-text);
   position: absolute;
-  color: rgba(0, 56, 102, 0.5);
-  transform: translateZ(-10px);
-  left: 0;
   top: 0;
-  z-index: -1;
+  left: 0;
+  color: transparent;
 }
 
-/* Para navegadores WebKit (Chrome, Safari) */
-.text-3d-text {
-  -webkit-text-stroke: 1px #003866;
+.holographic-text::before {
+  text-shadow: 
+    0 0 10px rgba(100, 255, 255, 0.6),
+    0 0 20px rgba(100, 255, 255, 0.4),
+    0 0 30px rgba(100, 255, 255, 0.2);
+  transform: translateZ(-30px);
+  filter: blur(5px);
+  opacity: 0.7;
 }
 
-/* Efecto de iluminación */
-.text-3d-text:hover {
-  animation: glow 1s ease-in-out infinite alternate;
+.holographic-text::after {
+  text-shadow: 
+    0 0 2px rgba(100, 255, 255, 0.8),
+    0 0 5px rgba(100, 255, 255, 0.6);
+  transform: translateZ(-15px);
+  filter: blur(1px);
+  opacity: 0.5;
 }
 
-@keyframes glow {
-  from {
+@keyframes float {
+  0%, 100% {
+    transform: rotateX(15deg) rotateY(-10deg) translateY(0);
     text-shadow: 
-      0 0 10px rgba(0, 168, 232, 0.8),
-      0 0 20px rgba(0, 168, 232, 0.6),
-      0 0 30px rgba(0, 168, 232, 0.4);
+      0 0 5px rgba(100, 255, 255, 0.5),
+      0 0 10px rgba(100, 255, 255, 0.4),
+      0 0 15px rgba(100, 255, 255, 0.3);
   }
-  to {
+  50% {
+    transform: rotateX(20deg) rotateY(-5deg) translateY(-20px);
     text-shadow: 
-      0 0 15px rgba(0, 168, 232, 1),
-      0 0 25px rgba(0, 168, 232, 0.8),
-      0 0 35px rgba(0, 168, 232, 0.6),
-      0 0 45px rgba(0, 168, 232, 0.4);
+      0 0 10px rgba(100, 255, 255, 0.7),
+      0 0 20px rgba(100, 255, 255, 0.5),
+      0 0 30px rgba(100, 255, 255, 0.3);
   }
+}
+
+/* Efecto de partículas holográficas */
+.particle-field {
+  background: transparent;
+  background-image: 
+    radial-gradient(1px 1px at 20px 30px, rgba(100, 255, 255, 0.8), transparent),
+    radial-gradient(1px 1px at 40px 70px, rgba(100, 255, 255, 0.6), transparent),
+    radial-gradient(1px 1px at 90px 40px, rgba(100, 255, 255, 0.4), transparent);
+  background-size: 100px 100px;
+  animation: particles 15s infinite linear;
+}
+
+@keyframes particles {
+  from { background-position: 0 0; }
+  to { background-position: 100px 100px; }
 }
