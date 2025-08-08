@@ -4,13 +4,13 @@ import { useEffect, useRef } from 'react';
 
 export default function Background() {
     const videoRef = useRef<HTMLVideoElement>(null);
-    const rafRef = useRef<number>();
+    const rafRef = useRef<number>(null);
 
     useEffect(() => {
         const video = videoRef.current;
         if (!video) return;
 
-        const totalDuration = 20;
+        const totalDuration = 8;
 
         const updatePlaybackRate = () => {
             if (!video) return;
@@ -21,7 +21,7 @@ export default function Background() {
 
             if (t < 5) {
                 // Aceleración suave: de 0.4x a 2x
-                rate = 0.4 + (1.6 * (t / 5)) ** 1.5;
+                rate = 0.9 + (1.6 * (t / 5)) ** 1.5;
             } else if (t < 15) {
                 // Velocidad constante alta
                 rate = 2;
