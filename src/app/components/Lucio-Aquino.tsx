@@ -11,7 +11,7 @@ export const LucioAquino = () => {
   const imageRef = useRef<HTMLDivElement>(null)
 
   useGSAP(() => {
-    const tl = gsap.timeline({ delay: 13 }) // Delay global de encendido
+    const tl = gsap.timeline({ delay: 7 }) // Delay global de encendido
 
     // Fase 1: Texto (tipo PS5)
     tl.fromTo(
@@ -25,7 +25,7 @@ export const LucioAquino = () => {
         opacity: 1,
         scale: 1,
         filter: 'blur(0px)',
-        duration: 2.2,
+        duration: 2,
         ease: 'expo.out',
       }
     )
@@ -47,29 +47,21 @@ export const LucioAquino = () => {
         duration: 1.5,
         ease: 'power3.out',
       },
-      '+=0.10' // pequeño delay luego del texto
+      '-=0.10' // pequeño delay luego del texto
     )
   }, [])
 
   return (
     <section
       ref={containerRef}
-      className="absolute w-full h-100 items-center top-70 left-55 flex perspective-1000"
+      className="absolute w-full h-100 justify-center items-center top-70 flex flex-row-reverse"
     >
       {/* Texto 3D */}
       <section ref={textRef}>
-        <div className="holographic-cone">
-          <div className="cone-layer cone-layer-1">
-            <h1 className="text-3d-text">Lucio-</h1>
-            <h1 className="text-3d-text">Aquino</h1>
-          </div>
-          <div className="cone-layer cone-layer-2">
-            <h1 className="text-3d-text">Lucio-</h1>
-            <h1 className="text-3d-text">Aquino</h1>
-          </div>
-          <div className="cone-layer cone-layer-3">
-            <h1 className="text-3d-text">Lucio-</h1>
-            <h1 className="text-3d-text">Aquino</h1>
+        <div className="">
+          <div className="cone-layer flex ml-10 cone-layer-1 gap-5 font-electrolize text-[#ffedd6] text-9xl">
+            <h1 className="text-3d-text text-shadow">Lucio</h1>
+            <h1 className="text-3d-text text-shadow">Aquino</h1>
           </div>
         </div>
       </section>
@@ -87,52 +79,6 @@ export const LucioAquino = () => {
           className="brightness-10 w-50 h-50"
         />
       </section>
-
-      {/* Estilos */}
-      <style jsx>{`
-        @import url('https://fonts.googleapis.com/css2?family=Electrolize&display=swap');
-
-        .holographic-cone {
-          position: relative;
-          transform-style: preserve-3d;
-          animation: rotate-cone 20s infinite linear;
-          left: 300px;
-          top: -70px;
-        }
-
-        .cone-layer {
-          position: absolute;
-          display: flex;
-          color: #ffedd6;
-          transition: all 0.3s ease;
-        }
-
-        .cone-layer-1 {
-          animation: floatZ1 6s ease-in-out infinite;
-          opacity: 1;
-          filter: blur(0.8px);
-        }
-
-        .cone-layer-2 {
-          animation: floatZ2 7s ease-in-out infinite;
-          opacity: 0.7;
-          filter: blur(10px);
-        }
-
-        .cone-layer-3 {
-          animation: floatZ3 8s ease-in-out infinite;
-          opacity: 0;
-          filter: blur(1px);
-        }
-
-        .text-3d-text {
-          font-family: 'Electrolize', sans-serif;
-          font-size: 7rem;
-          font-weight: 800;
-          text-transform: uppercase;
-          margin: 0 0.5rem;
-        }
-      `}</style>
     </section>
   )
 }

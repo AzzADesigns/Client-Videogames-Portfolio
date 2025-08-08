@@ -1,4 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Electrolize&display=swap');
 @import 'tailwindcss';
+
 
 :root {
     --background: #ffffff;
@@ -37,4 +39,19 @@ body {
 }
 .animate-slide-in {
     animation: slide-in 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+
+.font-electrolize {
+  font-family: 'Electrolize', sans-serif;
+}
+
+.text-shadow {
+    color: #ffedd6;
+    -webkit-text-stroke: 1px rgba(0, 0, 0, 0.276);
+    text-shadow: 
+    0 0 1px #ffedd6,
+    0 0 1px #ffedd6,
+    0 0 15px #ffedd6,
+    0 0 5px #ffedd6;
 }
