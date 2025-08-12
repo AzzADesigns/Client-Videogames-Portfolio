@@ -54,12 +54,12 @@ export const LucioAquino = () => {
   return (
     <section
       ref={containerRef}
-      className="absolute w-full h-100 justify-center items-center top-70 flex flex-row-reverse"
+      className="xl:absolute xl:w-full right-8 xl:right-0  xl:h-100 justify-center items-center top-60 xl:top-70 flex flex-col xl:flex-row-reverse"
     >
       {/* Texto 3D */}
       <section ref={textRef}>
         <div className="">
-          <div className="cone-layer flex ml-10 cone-layer-1 gap-5 font-electrolize text-[#ffedd6] text-9xl">
+          <div className="cone-layer flex mb-10 xl:mb-0 xl:ml-10 cone-layer-1 gap-5 font-electrolize text-[#ffedd6] text-6xl xl:text-9xl">
             <h1 className="text-3d-text text-shadow">Lucio</h1>
             <h1 className="text-3d-text text-shadow">Aquino</h1>
           </div>
@@ -69,14 +69,14 @@ export const LucioAquino = () => {
       {/* Imagen redonda */}
       <section
         ref={imageRef}
-        className="bg-[#FFEDD6] shadow-2xl shadow-[#635d55] w-70 h-70 flex justify-center items-center z-50 rounded-full"
+        className="bg-[#FFEDD6] shadow-2xl shadow-[#635d55] w-50 h-50 xl:w-70 xl:h-70 flex justify-center items-center z-50 rounded-full"
       >
         <Image
           src="/profile.png"
           alt="Foto de perfil"
-          width={300}
-          height={300}
-          className="brightness-10 w-50 h-50"
+          width={150}
+          height={150}
+          className="brightness-10 xl:w-50 xl:h-50"
         />
       </section>
     </section>
