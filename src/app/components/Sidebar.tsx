@@ -32,14 +32,14 @@ export default function Sidebar() {
   return (
     <aside
       ref={sidebarRef}
-      className="h-screen fixed w-25 ml-8 flex flex-col items-center justify-between py-6 px-2 shadow-xl"
+      className="xl:h-screen h-20 w-[85%] sticky bg-red-400 xl:w-25 ml-8 flex md:flex-col items-center justify-between py-6 px-2 shadow-xl"
     >
       <div className="flex relative flex-col items-center justify-center h-full gap-6 mt-2">
         {/* Avatar */}
         <section className="flex absolute top-0 w-75 p-0 h-20 gap-5 justify-center items-center left-0"></section>
 
         {/* Menú de íconos */}
-        <nav className="flex flex-col h-full justify-between py-35 gap-7 items-center">
+        <nav className="flex md:flex-col h-full justify-between py-35 gap-7 items-center">
           <Link
             href="/"
             className="border-2 p-4 rounded-full"
@@ -70,13 +70,7 @@ export default function Sidebar() {
           </Link>
         </nav>
       </div>
-      <div className="flex flex-col items-center gap-6 mb-2">
-        <button className="h-14 w-14 border-2 bg-red-500/70 flex items-center justify-center rounded-full hover:bg-red-600 transition-colors"
-            ref={(el) => el && (buttonsRef.current[4] = el)}
-        >
-          <FaPowerOff className="text-2xl text-white" />
-        </button>
-      </div>
+
     </aside>
   )
 }
