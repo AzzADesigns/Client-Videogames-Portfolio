@@ -69,14 +69,14 @@ export const LucioAquino = () => {
       {/* Imagen redonda */}
       <section
         ref={imageRef}
-        className="bg-[#FFEDD6] shadow-2xl shadow-[#635d55] w-75 h-75 xl:w-70 xl:h-70 flex justify-center items-center z-50 rounded-full"
+        className="bg-background shadow-2xl shadow-[#635d55] w-75 h-75 xl:w-70 xl:h-70 flex justify-center items-center z-40 rounded-full"
       >
         <Image
           src="/profile.png"
           alt="Foto de perfil"
           width={250}
           height={250}
-          className="brightness-10 xl:w-50 xl:h-50"
+          className="brightness-10 xl:w-50 xl:h-50 "
         />
       </section>
     </section>
