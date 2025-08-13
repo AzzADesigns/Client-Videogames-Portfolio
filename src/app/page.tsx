@@ -1,5 +1,5 @@
-import Background from './components/Background';
-import { LucioAquino } from './components/Lucio-Aquino';
+import Background from './components/molecules/shared/Background';
+import { LucioAquino } from './components/molecules/Lucio-Aquino.tsx/Lucio-Aquino';
 
 export default function Home() {
     return (
