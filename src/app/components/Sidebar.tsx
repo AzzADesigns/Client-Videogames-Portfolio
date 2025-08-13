@@ -25,36 +25,36 @@ export default function Sidebar() {
     )
   }, [])
 
-  const navItems = [
-    {
-      href: '/',
-      icon: <FaHome className="text-2xl text-orange-400 hover:text-orange-300 transition-colors" />, 
-      label: 'Inicio',
-    },
-    {
-      href: '/proyectos',
-      icon: <PiGameControllerBold className="text-2xl z-50 text-yellow-400 hover:text-yellow-300 transition-colors" />, 
-      label: 'Proyectos',
-    },
-    {
-      href: '/sobre-mi',
-      icon: <FaUserAlt className="text-2xl text-blue-400 hover:text-blue-300 transition-colors" />, 
-      label: 'Sobre mí',
-    },
-    {
-      href: '/contacto',
-      icon: <FaEnvelope className="text-2xl text-white hover:text-blue-200 transition-colors" />, 
-      label: 'Contacto',
-    },
-  ];
+const navItems = [
+  {
+    href: '/',
+    icon: <FaHome className="text-4xl text-background hover:text-background transition-colors icon-rgb" />,
+    label: 'Inicio',
+  },
+  {
+    href: '/proyectos',
+    icon: <PiGameControllerBold className="text-4xl z-50 text-background hover:text-background/50 transition-colors icon-rgb" />,
+    label: 'Proyectos',
+  },
+  {
+    href: '/sobre-mi',
+    icon: <FaUserAlt className="text-4xl text-background hover:text-background transition-colors icon-rgb" />,
+    label: 'Sobre mí',
+  },
+  {
+    href: '/contacto',
+    icon: <FaEnvelope className="text-4xl text-background hover:text-background transition-colors icon-rgb" />,
+    label: 'Contacto',
+  },
+];
 
   return (
-    <nav className="px-8 md:px-30 z-50 xl:px-0 xl:h-screen xl:items-center xl:justify-center xl:gap-25 w-full fixed bottom-5 xl:left-8 flex xl:flex-col justify-between xl:w-auto">
+    <nav className="px-8 md:px-30 z-50 backdrop-blur-2xl  xl:px-0 xl:h-screen xl:items-center xl:justify-center xl:gap-25 w-full fixed bottom-5 xl:left-5 flex xl:flex-col justify-between xl:w-25"> {/* group aquí */}
       {navItems.map((item, idx) => (
         <Link
           key={item.href}
           href={item.href}
-          className="relative border-2 p-4 rounded-full group"
+          className="relative p-4 h-16 w-16  rounded-full flex justify-center items-center transition-transform duration-300 will-change-transform hover:!scale-125 group hover:z-50 animated-border"
           aria-label={item.label}
           tabIndex={0}
           ref={(el: HTMLAnchorElement | null) => {
@@ -62,20 +62,16 @@ export default function Sidebar() {
           }}
         >
           {item.icon}
-
+        
           {/* Tooltip */}
           <span className="
-            absolute bottom-full mb-2 left-[230%] top-3  transform -translate-x-1/2
-            opacity-0 pointer-events-none
-            bg-gray-900 text-white text-lg h-8 w-30 flex justify-center items-center rounded
-            whitespace-nowrap
-            transition-opacity duration-300
-            group-hover:opacity-100
-            select-none
-            z-50
+            absolute  mb-2 lg:left-30 top-[-30]  left-8 lg:top-5 transform -translate-x-1/2
+            text-lg whitespace-nowrap select-none z-50
+            tooltip-rgb-text flex items-start  justify-center
           ">
             {item.label}
           </span>
+
         </Link>
       ))}
     </nav>
