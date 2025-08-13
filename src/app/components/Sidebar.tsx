@@ -33,7 +33,7 @@ export default function Sidebar() {
     },
     {
       href: '/proyectos',
-      icon: <PiGameControllerBold className="text-2xl text-yellow-400 hover:text-yellow-300 transition-colors" />, 
+      icon: <PiGameControllerBold className="text-2xl z-50 text-yellow-400 hover:text-yellow-300 transition-colors" />, 
       label: 'Proyectos',
     },
     {
@@ -49,19 +49,33 @@ export default function Sidebar() {
   ];
 
   return (
-    <nav className="px-8 md:px-30 xl:px-0 xl:h-screen xl:items-center xl:justify-center xl:gap-25 w-full fixed bottom-5 xl:left-8 flex xl:flex-col justify-between xl:w-auto">
+    <nav className="px-8 md:px-30 z-50 xl:px-0 xl:h-screen xl:items-center xl:justify-center xl:gap-25 w-full fixed bottom-5 xl:left-8 flex xl:flex-col justify-between xl:w-auto">
       {navItems.map((item, idx) => (
         <Link
           key={item.href}
           href={item.href}
-          className="border-2 p-4 rounded-full"
+          className="relative border-2 p-4 rounded-full group"
           aria-label={item.label}
           tabIndex={0}
           ref={(el: HTMLAnchorElement | null) => {
-            if (el) buttonsRef.current[idx] = el // guarda el <a> que renderiza Link
+            if (el) buttonsRef.current[idx] = el
           }}
         >
           {item.icon}
+
+          {/* Tooltip */}
+          <span className="
+            absolute bottom-full mb-2 left-[230%] top-3  transform -translate-x-1/2
+            opacity-0 pointer-events-none
+            bg-gray-900 text-white text-lg h-8 w-30 flex justify-center items-center rounded
+            whitespace-nowrap
+            transition-opacity duration-300
+            group-hover:opacity-100
+            select-none
+            z-50
+          ">
+            {item.label}
+          </span>
         </Link>
       ))}
     </nav>
