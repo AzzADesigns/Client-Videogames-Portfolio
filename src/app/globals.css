@@ -137,3 +137,16 @@ body {
   0% { background-position: 0% 50%; }
   100% { background-position: 100% 50%; }
 }
+
+
+
+
+
+/* En tu index.css */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE y Edge */
+  scrollbar-width: none; /* Firefox */
+}
