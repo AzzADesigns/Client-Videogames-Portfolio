@@ -19,7 +19,7 @@ export default function Sidebar() {
 
   const navItems = [
     { href: '/', icon: <NavIcon Icon={FaHome} />, label: 'Inicio' },
-    { href: '/proyectos', icon: <NavIcon Icon={PiGameControllerBold} />, label: 'Proyectos' },
+    { href: '/proyects', icon: <NavIcon Icon={PiGameControllerBold} />, label: 'Proyectos' },
     { href: '/sobre-mi', icon: <NavIcon Icon={FaUserAlt} />, label: 'Sobre mí' },
     { href: '/contacto', icon: <NavIcon Icon={FaEnvelope} />, label: 'Contacto' },
   ]
