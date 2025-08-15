@@ -12,7 +12,7 @@ export default function Background() {
     }, [])
 
     return (
-        <div className="fixed inset-0 z-[-1] overflow-hidden">
+        <div className="fixed h-[100vh] xl:h-screen inset-0 z-[-1] overflow-hidden">
             <video
                 ref={videoRef}
                 autoPlay
