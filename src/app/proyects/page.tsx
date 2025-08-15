@@ -1,7 +1,6 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
-import gsap from "gsap";
 import Lenis from "@studio-freight/lenis";
 
 export default function Page() {
@@ -9,42 +8,32 @@ export default function Page() {
   const cardRefs = useRef<HTMLDivElement[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  // Resalta la tarjeta seleccionada
-  const highlightCard = (index: number) => {
-    cardRefs.current.forEach((card, i) => {
-      if (!card) return;
-      gsap.to(card, {
-        scale: i === index ? 1.1 : 1,
-        boxShadow:
-          i === index
-            ? "0 0 20px rgb(255,0,255), 0 0 40px rgb(0,255,255)"
-            : "none",
-        duration: 0.3,
-      });
-    });
-  };
+  const totalGames = 11;
+  const duplicateCount = 3; // elementos duplicados al final
+  const games = Array.from({ length: totalGames }, (_, i) => i);
+  const displayGames = [...games, ...games.slice(0, duplicateCount)];
 
-  // Resalta la primera al montar
+  const clickAudio = useRef<HTMLAudioElement | null>(null);
+  const lastPlayedIndex = useRef<number | null>(null);
+
   useEffect(() => {
-    highlightCard(0);
+    clickAudio.current = new Audio("/click.wav"); // tu audio
   }, []);
 
-  // Lenis para suavizado sin romper layout
   useEffect(() => {
     const lenis = new Lenis({
-    smooth: true,
-    smoothWheel: true,
-    orientation: 'horizontal',
+      smoothWheel: true,
+      orientation: "horizontal",
     });
 
     const container = scrollRef.current;
     if (!container) return;
 
-    // Reemplaza el scroll horizontal de la rueda
+    // Scroll horizontal con la rueda
     const handleWheel = (e: WheelEvent) => {
       if (e.deltaY !== 0) {
         e.preventDefault();
-        const speed = 0.6;
+        const speed = 0.5;
         container.scrollLeft += e.deltaY * speed;
       }
     };
@@ -54,16 +43,34 @@ export default function Page() {
     const raf = (time: number) => {
       lenis.raf(time);
 
-      // Detecta índice según scroll
       const scrollLeft = container.scrollLeft;
       const cardWidth = cardRefs.current[0]?.offsetWidth || 0;
       const gap = 1;
       const total = cardWidth + gap;
-      const idx = Math.round(scrollLeft / total);
 
+      let idx = Math.round(scrollLeft / total);
+
+      // Circular scroll: reset al llegar al final
+      if (idx >= totalGames) {
+        container.scrollLeft = (idx - totalGames) * total;
+        idx = idx - totalGames;
+      }
+      if (idx < 0) {
+        container.scrollLeft = (idx + totalGames) * total;
+        idx = idx + totalGames;
+      }
+
+      // Cambio de selección
       if (idx !== selectedIndex) {
         setSelectedIndex(idx);
-        highlightCard(idx);
+
+        // Reproducir sonido solo una vez por índice
+        if (clickAudio.current && lastPlayedIndex.current !== idx) {
+          clickAudio.current.pause();
+          clickAudio.current.currentTime = 0;
+          clickAudio.current.play().catch(() => {});
+          lastPlayedIndex.current = idx;
+        }
       }
 
       requestAnimationFrame(raf);
@@ -79,30 +86,31 @@ export default function Page() {
 
   return (
     <div className="w-screen h-screen flex flex-col items-center justify-center">
-      <div className="flex w-[95%] h-screen ml-24 items-center justify-center">
+      <div className="flex w-full xl:w-[95%] h-screen ml-24 items-center justify-center">
         <div
           ref={scrollRef}
-          className="flex flex-nowrap gap-5 h-full items-center overflow-x-auto overflow-y-hidden scrollbar-hide"
+          className="flex flex-nowrap gap-5 h-full pl-30 items-center overflow-x-auto overflow-y-hidden scrollbar-hide"
         >
-          {Array.from({ length: 11 }, (_, i) => (
+          {displayGames.map((i, index) => (
             <div
-              key={i}
+              key={index}
               ref={(el) => {
-                if (el) cardRefs.current[i] = el;
+                if (el && index < totalGames) cardRefs.current[index] = el;
               }}
-              className="h-90 w-180 flex-shrink-0 ml-20 overflow-hidden rounded-2xl relative"
+              className={`h-90 w-160 flex-shrink-0 overflow-hidden 2xl:ml-15 rounded-2xl relative transition-all duration-300 ${
+                index % totalGames === selectedIndex
+                  ? " z-50 scale-125 border-background border-4 border-select-play p-2"
+                  : "z-[-1]"
+              }`}
             >
               <Image
-                src={`/juego${i + 1}.png`}
-                alt={`Juego ${i + 1}`}
+                src={`/juego${(i % totalGames) + 1}.png`}
+                alt={`Juego ${(i % totalGames) + 1}`}
                 width={560}
                 height={560}
                 className="w-full h-full object-cover rounded-2xl"
                 quality={100}
               />
-              <span className="absolute bottom-2 w-full text-center text-white font-bold">
-                Juego {i + 1}
-              </span>
             </div>
           ))}
         </div>
