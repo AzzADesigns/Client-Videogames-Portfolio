@@ -118,9 +118,9 @@ export default function Page() {
   };
 
   return (
-    <div className="w-screen h-screen flex flex-col items-center justify-center relative">
+    <div className="w-screen h-[100vh] xl:h-screen flex flex-col items-center justify-center relative">
       {/* Fondo dinámico */}
-      <div className="fixed inset-0 z-[-1] overflow-hidden">
+      <div className="fixed inset-0 z-[-1] h-[100vh] xl:h-screen  overflow-hidden">
         {isGameSelectionActive && selectedIndex !== null && (
           <Image
             src={`/juego${selectedIndex + 1}.png`}
@@ -132,10 +132,10 @@ export default function Page() {
         )}
       </div>
 
-      <div className="flex w-full xl:w-[95%] z-10 h-screen ml-24 items-center justify-center relative">
+      <div className="flex w-full xl:w-[95%] z-10 h-screen xl:ml-24 items-center justify-center relative">
         <div
           ref={scrollRef}
-          className="relative flex flex-nowrap ml-6 h-full pl-30 items-center overflow-x-auto overflow-y-hidden scrollbar-hide"
+          className="relative flex flex-nowrap xl:ml-6 h-full pl-30 items-center overflow-x-auto overflow-y-hidden scrollbar-hide"
         >
           {displayGames.map((i, index) => {
             const style = getCardStyles(index);
@@ -145,7 +145,7 @@ export default function Page() {
                 ref={(el) => {
                   if (el && index < totalGames) cardRefs.current[index] = el;
                 }}
-                className="h-90 w-160 flex-shrink-0 overflow-hidden rounded-2xl relative transition-all duration-300"
+                className="xl:h-90 mb-30 xl:mb-0 xl:w-160 w-80 flex-shrink-0 overflow-hidden rounded-2xl relative transition-all duration-300"
                 style={{
                   transform: style.transform,
                   opacity: style.opacity,
@@ -159,7 +159,7 @@ export default function Page() {
                   alt={`Juego ${(i % totalGames) + 1}`}
                   width={560}
                   height={560}
-                  className="w-full h-full object-cover rounded-2xl"
+                  className="w-full h-full object-cover  rounded-2xl"
                   quality={100}
                 />
               </div>
