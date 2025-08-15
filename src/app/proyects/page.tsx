@@ -1,50 +1,44 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
-import gsap from "gsap";
 import Lenis from "@studio-freight/lenis";
 
 export default function Page() {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const cardRefs = useRef<HTMLDivElement[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [isGameSelectionActive, setIsGameSelectionActive] = useState(false);
 
-  // Resalta la tarjeta seleccionada
-  const highlightCard = (index: number) => {
-    cardRefs.current.forEach((card, i) => {
-      if (!card) return;
-      gsap.to(card, {
-        scale: i === index ? 1.1 : 1,
-        boxShadow:
-          i === index
-            ? "0 0 20px rgb(255,0,255), 0 0 40px rgb(0,255,255)"
-            : "none",
-        duration: 0.3,
-      });
-    });
-  };
+  const totalGames = 11;
+  const duplicateCount = 3;
+  const games = Array.from({ length: totalGames }, (_, i) => i);
+  const displayGames = [...games, ...games.slice(0, duplicateCount)];
 
-  // Resalta la primera al montar
+  const clickAudio = useRef<HTMLAudioElement | null>(null);
+  const lastPlayedIndex = useRef<number | null>(null);
+
   useEffect(() => {
-    highlightCard(0);
+    clickAudio.current = new Audio("/click.wav");
   }, []);
 
-  // Lenis para suavizado sin romper layout
+  useEffect(() => {
+    setIsGameSelectionActive(true);
+    return () => setIsGameSelectionActive(false);
+  }, []);
+
   useEffect(() => {
     const lenis = new Lenis({
-    smooth: true,
-    smoothWheel: true,
-    orientation: 'horizontal',
+      smoothWheel: true,
+      orientation: "horizontal",
     });
 
     const container = scrollRef.current;
     if (!container) return;
 
-    // Reemplaza el scroll horizontal de la rueda
     const handleWheel = (e: WheelEvent) => {
       if (e.deltaY !== 0) {
         e.preventDefault();
-        const speed = 0.6;
+        const speed = 0.5;
         container.scrollLeft += e.deltaY * speed;
       }
     };
@@ -54,16 +48,31 @@ export default function Page() {
     const raf = (time: number) => {
       lenis.raf(time);
 
-      // Detecta índice según scroll
       const scrollLeft = container.scrollLeft;
       const cardWidth = cardRefs.current[0]?.offsetWidth || 0;
-      const gap = 1;
+      const gap = 5;
       const total = cardWidth + gap;
-      const idx = Math.round(scrollLeft / total);
+
+      let idx = Math.round(scrollLeft / total);
+
+      if (idx >= totalGames) {
+        container.scrollLeft = (idx - totalGames) * total;
+        idx = idx - totalGames;
+      }
+      if (idx < 0) {
+        container.scrollLeft = (idx + totalGames) * total;
+        idx = idx + totalGames;
+      }
 
       if (idx !== selectedIndex) {
         setSelectedIndex(idx);
-        highlightCard(idx);
+
+        if (clickAudio.current && lastPlayedIndex.current !== idx) {
+          clickAudio.current.pause();
+          clickAudio.current.currentTime = 0;
+          clickAudio.current.play().catch(() => {});
+          lastPlayedIndex.current = idx;
+        }
       }
 
       requestAnimationFrame(raf);
@@ -77,35 +86,102 @@ export default function Page() {
     };
   }, [selectedIndex]);
 
+  const getCardStyles = (index: number) => {
+    const relativeIndex = index - selectedIndex;
+
+    if (relativeIndex < 0) {
+      return {
+        transform: `translateX(-100%) scale(0.9)`,
+        opacity: 0,
+        zIndex: 0,
+        border: "none",
+        padding: 0,
+      };
+    } else if (relativeIndex === 0) {
+      return {
+        transform: `translateX(0px) scale(1.25)`,
+        opacity: 1,
+        zIndex: 50,
+        border: "4px solid #FFEDD6",
+        padding: "0.5rem",
+      };
+    } else {
+      const translateX = relativeIndex * 160;
+      return {
+        transform: `translateX(${translateX}px) scale(0.9)`,
+        opacity: 1,
+        zIndex: 10,
+        border: "none",
+        padding: 0,
+      };
+    }
+  };
+
   return (
-    <div className="w-screen h-screen flex flex-col items-center justify-center">
-      <div className="flex w-[95%] h-screen ml-24 items-center justify-center">
+    <div className="w-screen h-screen flex flex-col items-center justify-center relative">
+      {/* Fondo dinámico */}
+      <div className="fixed inset-0 z-[-1] overflow-hidden">
+        {isGameSelectionActive && selectedIndex !== null && (
+          <Image
+            src={`/juego${selectedIndex + 1}.png`}
+            alt={`Fondo Juego ${selectedIndex + 1}`}
+            fill
+            priority
+            className="object-cover blur-xs  scale-110 brightness-40"
+          />
+        )}
+      </div>
+
+      <div className="flex w-full xl:w-[95%] z-10 h-screen ml-24 items-center justify-center relative">
         <div
           ref={scrollRef}
-          className="flex flex-nowrap gap-5 h-full items-center overflow-x-auto overflow-y-hidden scrollbar-hide"
+          className="relative flex flex-nowrap ml-6 h-full pl-30 items-center overflow-x-auto overflow-y-hidden scrollbar-hide"
         >
-          {Array.from({ length: 11 }, (_, i) => (
-            <div
-              key={i}
-              ref={(el) => {
-                if (el) cardRefs.current[i] = el;
-              }}
-              className="h-90 w-180 flex-shrink-0 ml-20 overflow-hidden rounded-2xl relative"
-            >
-              <Image
-                src={`/juego${i + 1}.png`}
-                alt={`Juego ${i + 1}`}
-                width={560}
-                height={560}
-                className="w-full h-full object-cover rounded-2xl"
-                quality={100}
-              />
-              <span className="absolute bottom-2 w-full text-center text-white font-bold">
-                Juego {i + 1}
-              </span>
-            </div>
-          ))}
+          {displayGames.map((i, index) => {
+            const style = getCardStyles(index);
+            return (
+              <div
+                key={index}
+                ref={(el) => {
+                  if (el && index < totalGames) cardRefs.current[index] = el;
+                }}
+                className="h-90 w-160 flex-shrink-0 overflow-hidden rounded-2xl relative transition-all duration-300"
+                style={{
+                  transform: style.transform,
+                  opacity: style.opacity,
+                  zIndex: style.zIndex,
+                  border: style.border,
+                  padding: style.padding,
+                }}
+              >
+                <Image
+                  src={`/juego${(i % totalGames) + 1}.png`}
+                  alt={`Juego ${(i % totalGames) + 1}`}
+                  width={560}
+                  height={560}
+                  className="w-full h-full object-cover rounded-2xl"
+                  quality={100}
+                />
+              </div>
+            );
+          })}
         </div>
+
+        {/* Fade mask derecha */}
+        <div
+          className="absolute top-0 right-0 h-full w-40 pointer-events-none"
+          style={{
+            background: "linear-gradient(to left, rgba(0,0,0,0.8), rgba(0,0,0,0))",
+          }}
+        />
+
+        {/* Fade mask izquierda */}
+        <div
+          className="absolute top-0 left-0 h-full w-40 pointer-events-none"
+          style={{
+            background: "linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0))",
+          }}
+        />
       </div>
     </div>
   );
