@@ -25,7 +25,7 @@ export default function Sidebar() {
   ]
 
   return (
-    <nav className="px-8 md:px-30 z-50 lg:backdrop-blur-2xl xl:px-0 xl:h-screen xl:items-center xl:justify-center xl:gap-25 w-full fixed bottom-5 xl:left-5 flex xl:flex-col justify-between xl:w-25">
+    <nav className="px-8 md:px-30 z-50 xl:backdrop-blur-2xl xl:px-0 xl:h-screen xl:items-center xl:justify-center xl:gap-25 w-full fixed bottom-5 xl:bottom-0 xl:left-5 flex xl:flex-col justify-between xl:w-25">
       {navItems.map((item, idx) => (
         <Link
           key={item.href}

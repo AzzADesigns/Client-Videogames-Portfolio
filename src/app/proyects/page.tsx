@@ -132,10 +132,10 @@ export default function Page() {
         )}
       </div>
 
-      <div className="flex w-full xl:w-[95%] z-10 h-screen xl:ml-24 items-center justify-center relative">
+      <div className="flex w-full xl:w-[95%] z-10 h-screen xl:ml-18 2xl:ml-24 items-center justify-center relative">
         <div
           ref={scrollRef}
-          className="relative flex flex-nowrap xl:ml-6 h-full pl-30 items-center overflow-x-auto overflow-y-hidden scrollbar-hide"
+          className="relative flex flex-nowrap xl:ml-15 2xl:ml-6 h-full pl-30 items-center overflow-x-auto overflow-y-hidden scrollbar-hide"
         >
           {displayGames.map((i, index) => {
             const style = getCardStyles(index);
@@ -167,21 +167,6 @@ export default function Page() {
           })}
         </div>
 
-        {/* Fade mask derecha */}
-        <div
-          className="absolute top-0 right-0 h-full w-40 pointer-events-none"
-          style={{
-            background: "linear-gradient(to left, rgba(0,0,0,0.8), rgba(0,0,0,0))",
-          }}
-        />
-
-        {/* Fade mask izquierda */}
-        <div
-          className="absolute top-0 left-0 h-full w-40 pointer-events-none"
-          style={{
-            background: "linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0))",
-          }}
-        />
       </div>
     </div>
   );
