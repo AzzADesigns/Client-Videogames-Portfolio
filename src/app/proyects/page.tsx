@@ -7,9 +7,10 @@ export default function Page() {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const cardRefs = useRef<HTMLDivElement[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [isGameSelectionActive, setIsGameSelectionActive] = useState(false);
 
   const totalGames = 11;
-  const duplicateCount = 3; // elementos duplicados al final
+  const duplicateCount = 3;
   const games = Array.from({ length: totalGames }, (_, i) => i);
   const displayGames = [...games, ...games.slice(0, duplicateCount)];
 
@@ -17,7 +18,12 @@ export default function Page() {
   const lastPlayedIndex = useRef<number | null>(null);
 
   useEffect(() => {
-    clickAudio.current = new Audio("/click.wav"); // tu audio
+    clickAudio.current = new Audio("/click.wav");
+  }, []);
+
+  useEffect(() => {
+    setIsGameSelectionActive(true);
+    return () => setIsGameSelectionActive(false);
   }, []);
 
   useEffect(() => {
@@ -29,7 +35,6 @@ export default function Page() {
     const container = scrollRef.current;
     if (!container) return;
 
-    // Scroll horizontal con la rueda
     const handleWheel = (e: WheelEvent) => {
       if (e.deltaY !== 0) {
         e.preventDefault();
@@ -45,12 +50,11 @@ export default function Page() {
 
       const scrollLeft = container.scrollLeft;
       const cardWidth = cardRefs.current[0]?.offsetWidth || 0;
-      const gap = 1;
+      const gap = 5;
       const total = cardWidth + gap;
 
       let idx = Math.round(scrollLeft / total);
 
-      // Circular scroll: reset al llegar al final
       if (idx >= totalGames) {
         container.scrollLeft = (idx - totalGames) * total;
         idx = idx - totalGames;
@@ -60,11 +64,9 @@ export default function Page() {
         idx = idx + totalGames;
       }
 
-      // Cambio de selección
       if (idx !== selectedIndex) {
         setSelectedIndex(idx);
 
-        // Reproducir sonido solo una vez por índice
         if (clickAudio.current && lastPlayedIndex.current !== idx) {
           clickAudio.current.pause();
           clickAudio.current.currentTime = 0;
@@ -84,36 +86,102 @@ export default function Page() {
     };
   }, [selectedIndex]);
 
+  const getCardStyles = (index: number) => {
+    const relativeIndex = index - selectedIndex;
+
+    if (relativeIndex < 0) {
+      return {
+        transform: `translateX(-100%) scale(0.9)`,
+        opacity: 0,
+        zIndex: 0,
+        border: "none",
+        padding: 0,
+      };
+    } else if (relativeIndex === 0) {
+      return {
+        transform: `translateX(0px) scale(1.25)`,
+        opacity: 1,
+        zIndex: 50,
+        border: "4px solid #FFEDD6",
+        padding: "0.5rem",
+      };
+    } else {
+      const translateX = relativeIndex * 160;
+      return {
+        transform: `translateX(${translateX}px) scale(0.9)`,
+        opacity: 1,
+        zIndex: 10,
+        border: "none",
+        padding: 0,
+      };
+    }
+  };
+
   return (
-    <div className="w-screen h-screen flex flex-col items-center justify-center">
-      <div className="flex w-full xl:w-[95%] h-screen ml-24 items-center justify-center">
+    <div className="w-screen h-screen flex flex-col items-center justify-center relative">
+      {/* Fondo dinámico */}
+      <div className="fixed inset-0 z-[-1] overflow-hidden">
+        {isGameSelectionActive && selectedIndex !== null && (
+          <Image
+            src={`/juego${selectedIndex + 1}.png`}
+            alt={`Fondo Juego ${selectedIndex + 1}`}
+            fill
+            priority
+            className="object-cover blur-xs  scale-110 brightness-40"
+          />
+        )}
+      </div>
+
+      <div className="flex w-full xl:w-[95%] z-10 h-screen ml-24 items-center justify-center relative">
         <div
           ref={scrollRef}
-          className="flex flex-nowrap gap-5 h-full pl-30 items-center overflow-x-auto overflow-y-hidden scrollbar-hide"
+          className="relative flex flex-nowrap ml-6 h-full pl-30 items-center overflow-x-auto overflow-y-hidden scrollbar-hide"
         >
-          {displayGames.map((i, index) => (
-            <div
-              key={index}
-              ref={(el) => {
-                if (el && index < totalGames) cardRefs.current[index] = el;
-              }}
-              className={`h-90 w-160 flex-shrink-0 overflow-hidden 2xl:ml-15 rounded-2xl relative transition-all duration-300 ${
-                index % totalGames === selectedIndex
-                  ? " z-50 scale-125 border-background border-4 border-select-play p-2"
-                  : "z-[-1]"
-              }`}
-            >
-              <Image
-                src={`/juego${(i % totalGames) + 1}.png`}
-                alt={`Juego ${(i % totalGames) + 1}`}
-                width={560}
-                height={560}
-                className="w-full h-full object-cover rounded-2xl"
-                quality={100}
-              />
-            </div>
-          ))}
+          {displayGames.map((i, index) => {
+            const style = getCardStyles(index);
+            return (
+              <div
+                key={index}
+                ref={(el) => {
+                  if (el && index < totalGames) cardRefs.current[index] = el;
+                }}
+                className="h-90 w-160 flex-shrink-0 overflow-hidden rounded-2xl relative transition-all duration-300"
+                style={{
+                  transform: style.transform,
+                  opacity: style.opacity,
+                  zIndex: style.zIndex,
+                  border: style.border,
+                  padding: style.padding,
+                }}
+              >
+                <Image
+                  src={`/juego${(i % totalGames) + 1}.png`}
+                  alt={`Juego ${(i % totalGames) + 1}`}
+                  width={560}
+                  height={560}
+                  className="w-full h-full object-cover rounded-2xl"
+                  quality={100}
+                />
+              </div>
+            );
+          })}
         </div>
+
+        {/* Fade mask derecha */}
+        <div
+          className="absolute top-0 right-0 h-full w-40 pointer-events-none"
+          style={{
+            background: "linear-gradient(to left, rgba(0,0,0,0.8), rgba(0,0,0,0))",
+          }}
+        />
+
+        {/* Fade mask izquierda */}
+        <div
+          className="absolute top-0 left-0 h-full w-40 pointer-events-none"
+          style={{
+            background: "linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0))",
+          }}
+        />
       </div>
     </div>
   );
