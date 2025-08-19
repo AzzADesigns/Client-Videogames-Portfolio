@@ -2,7 +2,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { useHorizontalScroll } from "../hooks/useHorizonatScroll";
-import { useInfiniteCarousel } from "../hooks/useInfitieCarouse";
+import { useInfiniteCarousel } from "../hooks/useInfiniteCarousel";
 import { useCardStyles } from "../hooks/useCardStyles";
 
 

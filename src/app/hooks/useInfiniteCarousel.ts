@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 
 export function useInfiniteCarousel(
-  scrollRef: React.RefObject<HTMLDivElement>,
+  scrollRef: React.RefObject<HTMLDivElement | null>,
   totalGames: number
 ) {
+  
   const [selectedIndex, setSelectedIndex] = useState(0);
   const cardRefs = useRef<HTMLDivElement[]>([]);
   const clickAudio = useRef<HTMLAudioElement | null>(null);
