@@ -1,106 +1,156 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Electrolize&display=swap');
+@import 'tailwindcss';
+
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+    --background: #FFEDD6
+    --foreground: #171717;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --font-sans: var(--font-geist-sans);
+    --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+    :root {
+        --background: #FFEDD6;
+        --foreground: #FFEDD6;
+    }
 }
 
-
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 @keyframes slide-in {
-  from {
-    transform: translateX(-100vw);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
+    from {
+        transform: translateX(-100vw);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 .animate-slide-in {
-  animation: slide-in 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: slide-in 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 
-
-
-
-
-
-
-
-.text-3d {
-  perspective: 1000px;
-  text-align: center;
+.font-electrolize {
+  font-family: 'Electrolize', sans-serif;
 }
 
-.text-3d-text {
-  font-size: 8rem;
-  font-weight: bold;
-  color: #00A8E8;
-  text-shadow: 
-    0 0 10px rgba(0, 168, 232, 0.8),
-    0 0 20px rgba(0, 168, 232, 0.6),
-    0 0 30px rgba(0, 168, 232, 0.4);
-  
-  /* Efecto 3D con sombras múltiples */
+.text-shadow {
+    color: #ffedd6;
+    -webkit-text-stroke: 1px rgba(0, 0, 0, 0.276);
+    text-shadow: 
+    0 0 1px #ffedd6,
+    0 0 1px #ffedd6,
+    0 0 15px #ffedd6,
+    0 0 5px #ffedd6;
+}
+
+.icon-rgb {
+  transition: filter 0.3s linear;
+}
+
+.animated-border:hover .icon-rgb {
+  animation: iconRGB 1s linear infinite;
+}
+
+@keyframes iconRGB {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+
+.animated-border {
   position: relative;
-  display: inline-block;
-  transform-style: preserve-3d;
-  margin: 0.5em 0;
+  z-index: 0;
 }
 
-.text-3d-text::before {
-  content: attr(data-text);
+.animated-border::before {
+  content: "";
   position: absolute;
-  color: rgba(0, 56, 102, 0.5);
-  transform: translateZ(-10px);
-  left: 0;
-  top: 0;
+  inset: -3px;
+  border: 3px dashed transparent;
+  border-radius: 50%;
+  background: linear-gradient(90deg, red, orange, yellow, green, cyan, blue, violet, red);
+  background-size: 400% 400%;
+  -webkit-mask: 
+    radial-gradient(farthest-side, #0000 calc(100% - 3px), #000 calc(100% - 1px)),
+    repeating-conic-gradient(#000 0 10deg, #0000 10deg 20deg);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
   z-index: -1;
+
+  /* Inicial: sin animar */
+  transform: rotate(0deg);
 }
 
-/* Para navegadores WebKit (Chrome, Safari) */
-.text-3d-text {
-  -webkit-text-stroke: 1px #003866;
+/* Al hacer hover → animación de 1 vuelta */
+.animated-border:hover::before {
+  animation: rotateOnce 1s linear infinite, rgbOnce 1s linear infinite;
 }
 
-/* Efecto de iluminación */
-.text-3d-text:hover {
-  animation: glow 1s ease-in-out infinite alternate;
-}
-
-@keyframes glow {
-  from {
-    text-shadow: 
-      0 0 10px rgba(0, 168, 232, 0.8),
-      0 0 20px rgba(0, 168, 232, 0.6),
-      0 0 30px rgba(0, 168, 232, 0.4);
-  }
+@keyframes rotateOnce {
   to {
-    text-shadow: 
-      0 0 15px rgba(0, 168, 232, 1),
-      0 0 25px rgba(0, 168, 232, 0.8),
-      0 0 35px rgba(0, 168, 232, 0.6),
-      0 0 45px rgba(0, 168, 232, 0.4);
+    transform: rotate(360deg);
   }
 }
+
+@keyframes rgbOnce {
+  to {
+    filter: hue-rotate(360deg);
+  }
+}
+
+
+
+/* Tooltip styles */
+
+.tooltip-rgb-text {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  
+  /* Preparar el texto para degradado */
+  background: linear-gradient(90deg, red, orange, yellow, cyan, violet, red);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.animated-border:hover .tooltip-rgb-text {
+  opacity: 1;
+  animation: rgbText 2s linear infinite;
+}
+
+@keyframes rgbText {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+
+
+
+
+/* En tu index.css */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE y Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+
+
+
