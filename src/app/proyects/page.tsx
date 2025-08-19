@@ -1,7 +1,6 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
-import Lenis from "@studio-freight/lenis";
 
 export default function Page() {
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -27,27 +26,20 @@ export default function Page() {
   }, []);
 
   useEffect(() => {
-    const lenis = new Lenis({
-      smoothWheel: true,
-      orientation: "horizontal",
-    });
-
     const container = scrollRef.current;
     if (!container) return;
 
     const handleWheel = (e: WheelEvent) => {
       if (e.deltaY !== 0) {
         e.preventDefault();
-        const speed = 0.5;
+        const speed = 0.5; // velocidad de scroll
         container.scrollLeft += e.deltaY * speed;
       }
     };
 
     container.addEventListener("wheel", handleWheel, { passive: false });
 
-    const raf = (time: number) => {
-      lenis.raf(time);
-
+    const updateSelectedIndex = () => {
       const scrollLeft = container.scrollLeft;
       const cardWidth = cardRefs.current[0]?.offsetWidth || 0;
       const gap = 5;
@@ -55,6 +47,7 @@ export default function Page() {
 
       let idx = Math.round(scrollLeft / total);
 
+      // scroll infinito
       if (idx >= totalGames) {
         container.scrollLeft = (idx - totalGames) * total;
         idx = idx - totalGames;
@@ -75,14 +68,13 @@ export default function Page() {
         }
       }
 
-      requestAnimationFrame(raf);
+      requestAnimationFrame(updateSelectedIndex);
     };
 
-    requestAnimationFrame(raf);
+    requestAnimationFrame(updateSelectedIndex);
 
     return () => {
       container.removeEventListener("wheel", handleWheel);
-      lenis.destroy();
     };
   }, [selectedIndex]);
 
@@ -120,14 +112,14 @@ export default function Page() {
   return (
     <div className="w-screen h-[100vh] xl:h-screen flex flex-col items-center justify-center relative">
       {/* Fondo dinámico */}
-      <div className="fixed inset-0 z-[-1] h-[100vh] xl:h-screen  overflow-hidden">
+      <div className="fixed inset-0 z-[-1] h-[100vh] xl:h-screen overflow-hidden">
         {isGameSelectionActive && selectedIndex !== null && (
           <Image
             src={`/juego${selectedIndex + 1}.png`}
             alt={`Fondo Juego ${selectedIndex + 1}`}
             fill
             priority
-            className="object-cover blur-xs  scale-110 brightness-40"
+            className="object-cover blur-xs scale-110 brightness-40"
           />
         )}
       </div>
@@ -159,14 +151,13 @@ export default function Page() {
                   alt={`Juego ${(i % totalGames) + 1}`}
                   width={560}
                   height={560}
-                  className="w-full h-full object-cover  rounded-2xl"
+                  className="w-full h-full object-cover rounded-2xl"
                   quality={100}
                 />
               </div>
             );
           })}
         </div>
-
       </div>
     </div>
   );
