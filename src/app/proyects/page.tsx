@@ -1,9 +1,11 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
-import { useHorizontalScroll } from "../hooks/useHorizonatScroll";
-import { useInfiniteCarousel } from "../hooks/useInfiniteCarousel";
-import { useCardStyles } from "../hooks/useCardStyles";
+import { useHorizontalScroll } from "@/hooks/useHorizonatScroll";
+import { useInfiniteCarousel } from "@/hooks/useInfiniteCarousel";
+import { useCardStyles } from "@/hooks/useCardStyles";
+
+
 
 
 export default function Page() {
