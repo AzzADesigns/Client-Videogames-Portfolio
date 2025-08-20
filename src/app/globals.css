@@ -153,4 +153,6 @@ body {
 
 
 
-
+.revert {
+    filter: invert(1);
+}
