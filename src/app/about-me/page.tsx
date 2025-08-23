@@ -16,6 +16,10 @@ export default function Page() {
 
     const preguntas = [
         {
+            pregunta: "About Me",
+            respuesta:"Gaming for me is a portal to other worlds — a blend of creativity, challenge, and connection. I love how games can tell stories in interactive ways and push the boundaries of technology and art.",
+        },
+        {
             pregunta: "My Thoughts on Gaming",
             respuesta:"Gaming for me is a portal to other worlds — a blend of creativity, challenge, and connection. I love how games can tell stories in interactive ways and push the boundaries of technology and art.",
         },
@@ -49,7 +53,7 @@ export default function Page() {
             { innerText: 0 },
             {
                 innerText: 10,
-                duration: 2,
+                duration: 12.4,
                 ease: "power2.out",
                 snap: { innerText: 1 },
                 onUpdate: function () {
@@ -71,7 +75,7 @@ useGSAP(() => {
     {
       scale: 5,      // zoom
       y: -340,       // hacia abajo
-      x: -100,        // hacia la derecha
+      x: -260,        // hacia la derecha
       duration: 8,
       ease: "power2.inOut",
       yoyo: true,    // vuelve al inicio
@@ -121,7 +125,7 @@ useGSAP(() => {
         </ul>
 
         {/* Perfil */}
-        <figure className=" h-[40%] w-[80%] flex flex-col gap-5 justify-center items-center">
+        <figure className=" h-[40%] w-[65%]  flex flex-col gap-5 mt-5 justify-center items-center">
           <div
             className="w-45 h-45 rounded-full bg-cover flex justify-center items-center bg-center"
             style={{ backgroundImage: "url('/bg-img-perfil.jpg')" }}
@@ -140,7 +144,7 @@ useGSAP(() => {
         </figure>
 
         {/* Acordeón */}
-        <div className="w-full absolute mt-95 right-25 max-h-90 flex justify-center">
+        <div className="w-full absolute mt-93 right-50 max-h-90 flex justify-center">
           <div className="w-full max-w-xl h-auto border border-white/20 bg-gray-900/82 rounded-xl shadow-lg overflow-hidden">
             {preguntas.map((item, index) => (
               <article
@@ -174,8 +178,8 @@ useGSAP(() => {
           </div>
         </div>
 
-        {/* Mapa + contador */}
-        <div className="absolute right-12 top-40 flex flex-col items-center">
+        {/* Mapa + contador + download cv */}
+        <div className="absolute right-16 top-30 flex flex-col items-center">
           {/* Mapa animado */}
 
           <section className="relative">
@@ -186,18 +190,17 @@ useGSAP(() => {
                 alt="Mapa"
                 width={1950}
                 height={1950}
-                className="xl:w-65 xl:h-70 rounded-3xl revert"
+                className="xl:w-65 xl:h-85 rounded-3xl"
                 />
             </div>
             {/*ubicacion */}
                 <div
-      ref={markerRef}
-      className="absolute w-5 h-5 rounded-full bottom-19 right-25"
-    >
-      <FaMapMarkerAlt className="text-red-500" />
-    </div>
+                  ref={markerRef}
+                  className="absolute w-5 h-5 rounded-full bottom-18.5 right-23"
+                >
+                  <FaMapMarkerAlt className="text-red-500" />
+                </div>
           </section>
-
           {/* Contador */}
           <div className="mt-10 bg-gray-900/82 flex flex-col justify-center items-center w-65 backdrop-blur-md rounded-2xl p-4 shadow-lg border border-white/20">
             <span
@@ -210,6 +213,11 @@ useGSAP(() => {
               Years of Experience
             </p>
           </div>
+
+           {/* Botón Download CV */} 
+          <button className="mt-10 cursor-pointer hover:bg-gray-950 bg-gray-900/82 flex flex-col justify-center items-center w-65 backdrop-blur-md rounded-2xl p-4 shadow-lg border border-white/20">
+              <p className="font-semibold">Donwload CV</p>
+          </button>
         </div>
       </article>
     </section>
