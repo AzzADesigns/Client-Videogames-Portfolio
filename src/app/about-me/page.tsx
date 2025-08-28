@@ -183,7 +183,7 @@ useGSAP(() => {
           {/* Mapa animado */}
 
           <section className="relative">
-            <div className="backdrop-blur-md bg-gray-900/82 border border-white/20 rounded-2xl overflow-hidden">
+            <div className="backdrop-blur-md bg-gray-900/82 border border-white/20 rounded-2xl border-0 overflow-hidden">
                 <Image
                 ref={mapRef}
                 src="/mapa.png"
